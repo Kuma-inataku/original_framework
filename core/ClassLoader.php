@@ -1,7 +1,9 @@
 <?php
 class ClassLoader
 {
-  protected function register()
+  protected $dir;
+
+  public function register()
   {
     spl_autoload_register([$this,'loadClass']);
   }
