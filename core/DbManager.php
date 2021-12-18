@@ -4,6 +4,18 @@ class DbManager
 {
   protected $connections = [];
   protected $repository_connection_map = [];
+  protected $repositories = [];
+
+  public function __destruct()
+  {
+    foreach ($this->repositories as $repository) {
+      unset($repository);
+    }
+
+    foreach ($this->connections as $con) {
+      unset($con)
+    }
+  }
 
   public function connect($name, $params)
   {
@@ -50,5 +62,19 @@ class DbManager
     }
 
     return $con;
+  }
+
+  public function get($repository_name) 
+  {
+    if (! isset($this->repositories[$repository_name])) {
+      $repository_class = $repository_name . 'Repository';
+      $con = $this->getConnectionForRepository($repository_name);
+
+      $repository = new $repository_class($con);
+
+      $this->repositories[$repository_name] = $repository;
+    }
+
+    return $this->repositories[$repository_name];
   }
 }
