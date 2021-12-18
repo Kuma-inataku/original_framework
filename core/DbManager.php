@@ -13,7 +13,7 @@ class DbManager
     }
 
     foreach ($this->connections as $con) {
-      unset($con)
+      unset($con);
     }
   }
 
