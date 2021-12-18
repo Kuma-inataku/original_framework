@@ -3,6 +3,7 @@
 class DbManager
 {
   protected $connections = [];
+  protected $repository_connection_map = [];
 
   public function connect($name, $params)
   {
@@ -32,5 +33,22 @@ class DbManager
     }
 
     return $this->connections[$name];
+  }
+
+  public function setRepositoryConnectionMap($repository_name, $name)
+  {
+    $this->repository_connection_map[$repository_name] = $name;
+  }
+
+  public function getConnectionForRepository($repository_name)
+  {
+    if (isset($this->repository_connection_map[$repository_name])) {
+      $name = $this->repository_connection_map[$repository_name];
+      $con = $this->getConnection($name);
+    } else {
+      $con = $this->getConnection();
+    }
+
+    return $con;
   }
 }
